@@ -34,6 +34,9 @@ sudo certbot certonly \
 
 <details><summary> HOMEWORK #6 cloud-testapp </summary>
 
+testapp_IP = 35.202.63.243
+testapp_port = 9292
+
 gcloud compute instances create reddit-app --boot-disk-size=10GB --image-family ubuntu-1604-lts --image-project=ubuntu-os-cloud --machine-type=g1-small  --tags puma-server  --restart-on-failure --metadata startup-script-url=gs://yvb583-otus-startupscript/startup_all.sh
 
 gcloud compute firewall-rules create default-puma-server --action allow --target-tags puma-server --rules tcp:9292 --enable-logging
