@@ -1,0 +1,7 @@
+{
+	"project_id" : "infra",
+        "source_image_family" : "ubuntu",
+	"image_description" : "description server",
+	"tags" : "tag",
+	"ssh_username" : "user"
+}
