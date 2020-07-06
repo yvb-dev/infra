@@ -1,40 +1,25 @@
-variable project {
-  description = "Project ID"
-}
+variable project {}
 
-variable region {
-  description = "Region"
-  default     = "europe-west1"
-}
+variable region {}
 
-variable zone {
-  description = "Zone"
-  default     = "europe-west1-b"
-}
+variable zone {}
 
-variable public_key_path {
-  description = "Path to the public key used for ssh access"
-}
+variable public_key_path {}
 
-variable private_key_path {
-  description = "Path to the private key used for ssh access"
-}
+variable private_key_path {}
 
-variable disk_image {
-  description = "Disk image"
-}
+variable disk_image_app {}
 
-variable count {
-  description = "Count"
-  default     = "1"
-}
+variable disk_image_db {}
 
-variable app_disk_image {
-  description = "Disk image for reddit app"
-  default     = "reddit-app-base"
-}
+variable name_app {}
 
-variable db_disk_image {
-  description = "Disk image for reddit db"
-  default     = "reddit-db-base"
-}
+variable name_db {}
+
+variable app_count {}
+
+variable db_count {}
+
+variable provision_need {}
+
+variable ssh_source_ranges {}

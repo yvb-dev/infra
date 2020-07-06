@@ -1,26 +1,24 @@
-resource "google_compute_http_health_check" "puma-http-hc" {
-  name         = "puma-http-health-check"
-  request_path = "/"
-  port         = "9292"
+resource "google_compute_target_pool" "reddit-app-pool" {
+  name   = "reddit-app-pool"
+  region = "${var.region}"
 
-  timeout_sec        = 1
-  check_interval_sec = 1
-}
-
-resource "google_compute_target_pool" "puma-target-pool" {
-  name = "instance-pool"
-
-  instances = [
-    "${google_compute_instance.app.*.self_link}",
-  ]
+  instances = ["${var.zone}/reddit-app-0", "${var.zone}/reddit-app-1"]
 
   health_checks = [
-    "${google_compute_http_health_check.puma-http-hc.self_link}",
+    "${google_compute_http_health_check.reddit-app-healthcheck.name}",
   ]
 }
 
-resource "google_compute_forwarding_rule" "puma-lb-forwarding-rule" {
-  name                  = "puma-lb-forwarding-rule"
-  load_balancing_scheme = "EXTERNAL"
-  target                = "${google_compute_target_pool.puma-target-pool.self_link}"
+resource "google_compute_forwarding_rule" "reddit-app-forwarding-rule" {
+  name       = "reddit-app-forwarding-rule"
+  target     = "${google_compute_target_pool.reddit-app-pool.self_link}"
+  port_range = "9292"
+}
+
+resource "google_compute_http_health_check" "reddit-app-healthcheck" {
+  name               = "reddit-app-healthcheck"
+  check_interval_sec = 3
+  timeout_sec        = 3
+  request_path       = "/"
+  port               = "9292"
 }

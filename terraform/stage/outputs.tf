@@ -1,3 +1,7 @@
-output "app_external_ip" {
-  value = "${module.app.app_external_ip}"
+output "ip-app" {
+  value = "${module.app.instance_ip}"
+}
+
+output "ip-db" {
+  value = "${module.db.instance_ip}"
 }

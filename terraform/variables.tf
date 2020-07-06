@@ -1,13 +1,9 @@
-variable project {
-  description = "Project ID"
-}
+variable project {}
 
-variable region {
-  description = "Region"
-  default     = "europe-west1"
-}
+variable region {}
 
-variable zone {
-  description = "Zone"
-  default     = "europe-west1-b"
+variable zone {}
+
+variable names {
+  type = "list"
 }
