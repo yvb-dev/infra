@@ -1,0 +1,7 @@
+{
+	"project_id" : "infra-258714",
+        "source_image_family" : "redit",
+	"image_description" : "description server",
+	"tags" : "tag",
+	"ssh_username" : "appuser"
+}

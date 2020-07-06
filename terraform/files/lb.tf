@@ -24,4 +24,3 @@ resource "google_compute_forwarding_rule" "puma-lb-forwarding-rule" {
   load_balancing_scheme = "EXTERNAL"
   target                = "${google_compute_target_pool.puma-target-pool.self_link}"
 }
-
