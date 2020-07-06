@@ -1,21 +1,21 @@
-resource "google_compute_instance" "app" {
-  name         = "reddit-app"
+resource "google_compute_instance" "insts" {
+  count        = "${var.app_count}"
+  name         = "${var.name_app}-${count.index + 1}"
   machine_type = "g1-small"
   zone         = "${var.zone}"
-  tags         = ["reddit-app"]
+  tags         = ["${var.name_app}"]
 
   boot_disk {
     initialize_params {
-      image = "${var.app_disk_image}"
+      image = "${var.disk_image_app}"
     }
   }
 
   network_interface {
-    network = "default"
+    network       = "default"
+    access_config = {}
 
-    access_config = {
-      nat_ip = "${google_compute_address.app_ip.address}"
-    }
+    # nat_ip = "${google_compute_address.app_ip.address}"
   }
 
   metadata {
@@ -23,20 +23,45 @@ resource "google_compute_instance" "app" {
   }
 }
 
-resource "google_compute_address" "app_ip" {
-  name = "reddit-app-ip"
-}
+resource "null_resource" "app_provision" {
+  count = "${var.app_count}"
 
-resource "google_compute_firewall" "firewall_puma" {
-  name    = "allow-puma-default"
-  network = "default"
+  triggers {
+    need = "${var.provision_need}"
 
-  allow {
-    protocol = "tcp"
-
-    ports = ["9292"]
+    #filename = "test-${uuid()}"
+    #insts_ids = "${join(",", google_compute_instance.insts.*.instance_id)}"
   }
 
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["reddit-app"]
+  provisioner "remote-exec" {
+    script = "${path.module}/files/deploy-inline.sh"
+
+    connection {
+      host        = "${element(google_compute_instance.insts.*.network_interface.0.access_config.0.nat_ip,count.index)}"
+      type        = "ssh"
+      user        = "appuser"
+      agent       = false
+      private_key = "${file(var.private_key_path)}"
+    }
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo sed 's/127.0.0.1:27017/${var.db_ip}:27017/g' -i /home/appuser/reddit/app.rb",
+      "sudo systemctl start puma",
+    ]
+
+    connection {
+      host        = "${element(google_compute_instance.insts.*.network_interface.0.access_config.0.nat_ip,count.index)}"
+      type        = "ssh"
+      user        = "appuser"
+      agent       = false
+      private_key = "${file(var.private_key_path)}"
+    }
+  }
 }
+
+#resource "google_compute_address" "app_ip" {
+#  name = "${var.name_app}-static-ip"
+#}
+

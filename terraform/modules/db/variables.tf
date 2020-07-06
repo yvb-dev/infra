@@ -1,12 +1,13 @@
-variable public_key_path {
-  description = "Path to the public key used to connect to instance"
-}
+variable zone {}
 
-variable zone {
-  description = "Zone"
-}
+variable public_key_path {}
 
-variable db_disk_image {
-  description = "Disk image for reddit db"
-  default     = "reddit-db-base"
-}
+variable private_key_path {}
+
+variable disk_image_db {}
+
+variable name_db {}
+
+variable db_count {}
+
+variable provision_need {}

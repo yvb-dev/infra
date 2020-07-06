@@ -1,13 +1,17 @@
-variable public_key_path {
-  description = "Path to the public key used to connect to instance"
-}
+variable zone {}
 
-variable zone {
-  description = "Zone"
-}
+variable public_key_path {}
 
-variable app_disk_image {
-  description = "Disk image for reddit app"
-  default     = "reddit-app-base"
-}
+variable private_key_path {}
 
+variable disk_image_app {}
+
+variable name_app {}
+
+variable app_count {}
+
+variable provision_need {}
+
+variable db_ip {
+  type = "string"
+}
